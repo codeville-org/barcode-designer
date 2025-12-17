@@ -1,36 +1,16 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Printer, Trash2 } from "lucide-react";
 import Toolbar from "./components/toolbar/Toolbar";
 import Canvas from "./components/canvas/Canvas";
 import PropertiesPanel from "./components/canvas/PropertiesPanel";
 import PrintPreview from "./components/print/PrintPreview";
 import { useCanvasStore } from "./lib/store/useCanvasStore";
-import { checkPendingImports } from "./lib/utils/importHandler";
 
 export default function Home() {
   const [showPrintPreview, setShowPrintPreview] = useState(false);
-  const { elements, clearCanvas, addElement } = useCanvasStore();
-
-  // Check for pending image imports from external apps
-  useEffect(() => {
-    const checkForImports = () => {
-      const pendingImport = checkPendingImports();
-      if (pendingImport) {
-        console.log("Processing pending import:", pendingImport);
-        addElement(pendingImport.element);
-      }
-    };
-
-    // Check immediately on mount
-    checkForImports();
-
-    // Set up interval to check every second for new imports
-    const interval = setInterval(checkForImports, 1000);
-
-    return () => clearInterval(interval);
-  }, [addElement]);
+  const { elements, clearCanvas } = useCanvasStore();
 
   const handleClearCanvas = () => {
     if (

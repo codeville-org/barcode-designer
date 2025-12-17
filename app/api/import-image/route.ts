@@ -2,10 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 interface ImportImageRequest {
   image?: string; // base64 data URL or URL
-  url?: string; // Alternative: direct URL  x?: number;
-  y?: number;
-  width?: number;
-  height?: number;
+  url?: string; // Alternative: direct URL
   position?: {
     x?: number;
     y?: number;
@@ -93,32 +90,23 @@ export async function POST(
       id: `image-${Date.now()}`,
       type: "image" as const,
       content: imageContent,
-      x: body.position?.x || 0,
-      y: body.y || body.position?.y || 50,
-      width: body.width || body.size?.width || 150,
-      height: body.height || body.size?.height || 150,
+      x: body.position?.x || 50,
+      y: body.position?.y || 50,
+      width: body.size?.width || 150,
+      height: body.size?.height || 150,
       rotation: 0
     };
 
-    const response = NextResponse.json({
+    return NextResponse.json({
       success: true,
       element
     });
-
-    // Add CORS headers for cross-origin requests
-    response.headers.set("Access-Control-Allow-Origin", "*");
-    response.headers.set("Access-Control-Allow-Methods", "POST, OPTIONS");
-    response.headers.set("Access-Control-Allow-Headers", "Content-Type");
-
-    return response;
   } catch (error) {
     console.error("Error processing image import:", error);
-    const response = NextResponse.json(
+    return NextResponse.json(
       { success: false, error: "Internal server error" },
       { status: 500 }
     );
-    response.headers.set("Access-Control-Allow-Origin", "*");
-    return response;
   }
 }
 
