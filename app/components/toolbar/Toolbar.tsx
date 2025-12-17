@@ -6,6 +6,8 @@ import { getDefaultBarcodeValue } from "@/app/lib/barcode/generators";
 
 export default function Toolbar() {
   const addElement = useCanvasStore((state) => state.addElement);
+  const canvasWidth = useCanvasStore((state) => state.canvasWidth);
+  const canvasHeight = useCanvasStore((state) => state.canvasHeight);
 
   const handleAddText = () => {
     const newElement = {
@@ -54,10 +56,10 @@ export default function Toolbar() {
             id: `image-${Date.now()}`,
             type: "image" as const,
             content: dataUrl,
-            x: 50,
-            y: 50,
-            width: 150,
-            height: 150,
+            x: 0,
+            y: 0,
+            width: canvasWidth,
+            height: canvasHeight,
             rotation: 0
           };
           addElement(newElement);
